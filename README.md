@@ -103,4 +103,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Author
 
-Built by [Fernando Sánchez Jumbo](https://github.com/JFSJ25) as a practice project and portfolio piece.
+Built by [Fernando Sánchez Jumbo](https://github.com/JFSJ25)
