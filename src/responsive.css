@@ -16,9 +16,17 @@
     justify-content: center;
   }
 
-  .filter {
-    flex: 1 1 100%;
+  .filter,
+  .sorted {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 0;
     padding: 0;
+  }
+
+  .filter select,
+  .sorted select {
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .filter label,
@@ -30,8 +38,13 @@
     font-size: 14px;
   }
 
-  .list-items {
-    gap: 24px;
+  .dnd-hint {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .drag-handle {
+    font-size: 12px;
   }
 
   .item {
@@ -40,6 +53,14 @@
 
   .task > input {
     font-size: 17px;
+  }
+
+  .task-meta {
+    flex-wrap: wrap;
+  }
+
+  .priority-control {
+    gap: 8px;
   }
 
   .add-btn,
@@ -63,8 +84,9 @@
   }
 
   .frm-header {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 10px;
   }
 
@@ -75,17 +97,20 @@
     max-height: calc(100dvh - 280px);
   }
 
-  .filter {
-    width: 100%;
+  .filter,
+  .sorted {
+    width: calc(50% - 5px);
+    flex: 1 1 calc(50% - 5px);
+    min-width: 0;
     padding: 0;
   }
 
-  .filter label {
+  /* .filter label {
     display: block;
     margin-bottom: 6px;
     margin-right: 0;
     font-size: 13px;
-  }
+  } */
 
   .filter select {
     width: 100%;
@@ -94,14 +119,34 @@
     min-height: 40px;
   }
 
-  .task-counter {
-    font-size: 13px;
-    align-self: flex-start;
-    width: calc(100% - 8px);
+  .sorted select {
+    width: 100%;
+    font-size: 14px;
+    box-sizing: border-box;
+    min-height: 40px;
   }
 
-  .list-items {
-    gap: 16px;
+  .switch-theme,
+  .add-btn,
+  .deleteCompleted-btn {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .task-counter {
+    font-size: 13px;
+    /* align-self: flex-start; */
+    /* width: calc(100% - 8px); */
+  }
+
+  .dnd-hint {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .dnd-hint > button {
+    align-self: flex-end;
   }
 
   .item {
@@ -115,6 +160,54 @@
 
   .task > input {
     font-size: 16px;
+  }
+
+  .drag-handle {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  .task-meta {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .task-meta > label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .task-meta .priority-badge {
+    flex-shrink: 0;
+    font-size: 11px;
+    padding: 2px 7px;
+  }
+
+  .priority-control {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .priority-control > label {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .priority-control > select {
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 30px;
+    box-sizing: border-box;
   }
 
   .add-btn,
@@ -141,5 +234,107 @@
   .checkbox {
     min-width: 28px;
     height: 28px;
+  }
+}
+
+@media (max-width: 400px) {
+  .frm-header,
+  .frm-body {
+    width: calc(100% - 6px);
+  }
+
+  .frm-header {
+    gap: 8px;
+  }
+
+  .filter,
+  .sorted {
+    width: calc(50% - 4px);
+    flex: 1 1 calc(50% - 4px);
+  }
+
+  .filter select,
+  .sorted select {
+    min-height: 38px;
+    font-size: 13px;
+    padding: 4px;
+  }
+
+  .item {
+    gap: 8px;
+    padding-left: 6px;
+  }
+
+  .task {
+    gap: 6px;
+  }
+
+  .task > input {
+    font-size: 16px;
+  }
+
+  .task-meta {
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  .task-meta > label {
+    font-size: 14px;
+    line-height: 1.2;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .task-meta .priority-badge {
+    flex-shrink: 0;
+    min-width: 5px;
+    text-align: center;
+    padding: 2px 6px;
+    font-size: 0;
+    line-height: 1;
+  }
+
+  .task-meta .priority-badge::before {
+    content: attr(data-short);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .priority-control > label {
+    font-size: 13px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .priority-control > select {
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 0;
+    /* min-height: 30px; */
+    font-size: 13px;
+  }
+
+  .add-btn,
+  .deleteCompleted-btn,
+  .switch-theme__button {
+    min-height: 40px;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .dnd-hint {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .delete-btn {
+    min-width: 34px;
+    min-height: 34px;
   }
 }

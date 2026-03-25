@@ -15,8 +15,14 @@ Add your deployed URL here once published:
 - Create new tasks.
 - Delete individual tasks.
 - Mark tasks as completed or pending.
+- Assign and edit task priority (`none`, `low`, `medium`, `high`).
 - Clear all completed tasks.
 - Filter by status: `all`, `completed`, `pending`.
+- Sort tasks by `custom`, `priority`, or `date`.
+- Reorder tasks manually in `custom` sort mode.
+- Drag and drop powered by `dnd-kit` with handle-based dragging.
+- Mobile-friendly drag behavior (touch sensor + long press).
+- One-time drag hint persisted in `localStorage`.
 - Progress counter (`x of y completed`).
 - Light/Dark theme switch.
 - `localStorage` persistence.
@@ -27,6 +33,7 @@ Add your deployed URL here once published:
 - React 19
 - TypeScript
 - Vite
+- dnd-kit (`@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities`)
 - ESLint
 - pnpm
 
@@ -70,7 +77,8 @@ pnpm run test:ci # run coverage checks used in CI
 Current coverage includes:
 
 - Persistence helpers for tasks/filter/theme.
-- Task context behavior (add, update, delete, clear completed, and filter updates).
+- Task context behavior (add, update, delete, reorder, clear completed, and filter updates).
+- UI behavior for filtering, item rendering, and drag-enabled task interactions.
 
 Test structure:
 
@@ -91,6 +99,20 @@ Minimum coverage enforced in CI:
 - Encapsulate logic in reusable hooks.
 - Keep UI state synchronized with `localStorage`.
 - Apply a maintainable structure for small/medium projects.
+
+## Drag and Drop Behavior
+
+- Drag is enabled only when sort mode is `custom`.
+- Drag starts from the task handle (`::`) to avoid accidental drags.
+- Keyboard, pointer, and touch sensors are enabled through `dnd-kit`.
+- On mobile, drag activates with long press according to touch sensor settings.
+
+## Project Notes
+
+- `TaskList` was modularized to keep responsibilities clear:
+  - `src/components/TaskList.tsx`: filtering + DnD context orchestration.
+  - `src/components/SortableTaskItem.tsx`: sortable binding between DnD and item UI.
+  - `src/hooks/useTaskListDnDState.ts`: DnD sensor config + drag/hint state.
 
 ## Future Improvements
 

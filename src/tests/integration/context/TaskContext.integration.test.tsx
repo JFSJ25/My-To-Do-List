@@ -5,26 +5,41 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { FILTER_KEY, TASKS_KEY } from '../../../constants/storageKeys'
 import { useTaskContext } from '../../../context/TaskContext'
 import { TaskProvider } from '../../../context/TaskProvider'
+import { SortOption } from '../../../types/sortOption'
 
 function ContextProbe() {
   const {
     taskList,
     filter,
+    activeSort,
     addTask,
     clearCompleted,
     handleFilter,
+    handleSort,
     deleteTask,
-    updateTask
+    updateTask,
+    reorderTask
   } = useTaskContext()
 
   return (
     <section>
       <p data-testid="count">{taskList.length}</p>
       <p data-testid="filter">{filter}</p>
+      <p data-testid="active-sort">{activeSort}</p>
+      <p data-testid="order">{taskList.map(task => task.id).join(',')}</p>
       <button onClick={addTask}>add-task</button>
       <button onClick={clearCompleted}>clear-completed</button>
       <button onClick={() => handleFilter('completed')}>
         set-completed-filter
+      </button>
+      <button onClick={() => handleSort(SortOption.priority)}>
+        set-priority-sort
+      </button>
+      <button onClick={() => handleSort(SortOption.custom)}>
+        set-custom-sort
+      </button>
+      <button onClick={() => reorderTask('todo', 'done')}>
+        reorder-todo-to-top
       </button>
       <button onClick={() => deleteTask('done')}>delete-done</button>
       <button
@@ -52,13 +67,15 @@ function setStoredTasks() {
         id: 'done',
         text: 'Completed task',
         completed: true,
-        date: '20/03/2026 10:00'
+        date: '20/03/2026 10:00',
+        priority: 'low'
       },
       {
         id: 'todo',
         text: 'Pending task',
         completed: false,
-        date: '20/03/2026 10:00'
+        date: '19/03/2026 10:00',
+        priority: 'high'
       }
     ])
   )
@@ -112,5 +129,43 @@ describe('TaskProvider and useTaskContext', () => {
 
     await user.click(screen.getByRole('button', { name: 'clear-completed' }))
     expect(screen.getByTestId('count')).toHaveTextContent('1')
+  })
+
+  it('Given tasks with different priorities When sort and reorder actions are triggered Then task order follows active sort rules', async () => {
+    const user = userEvent.setup()
+    setStoredTasks()
+
+    render(
+      <TaskProvider>
+        <ContextProbe />
+      </TaskProvider>
+    )
+
+    expect(screen.getByTestId('active-sort')).toHaveTextContent(
+      SortOption.custom
+    )
+    expect(screen.getByTestId('order')).toHaveTextContent('done,todo')
+
+    await user.click(screen.getByRole('button', { name: 'set-priority-sort' }))
+
+    expect(screen.getByTestId('active-sort')).toHaveTextContent(
+      SortOption.priority
+    )
+    expect(screen.getByTestId('order')).toHaveTextContent('todo,done')
+
+    await user.click(
+      screen.getByRole('button', { name: 'reorder-todo-to-top' })
+    )
+    expect(screen.getByTestId('order')).toHaveTextContent('todo,done')
+
+    await user.click(screen.getByRole('button', { name: 'set-custom-sort' }))
+    await user.click(
+      screen.getByRole('button', { name: 'reorder-todo-to-top' })
+    )
+
+    expect(screen.getByTestId('active-sort')).toHaveTextContent(
+      SortOption.custom
+    )
+    expect(screen.getByTestId('order')).toHaveTextContent('done,todo')
   })
 })

@@ -1,5 +1,6 @@
 import type { Task } from '../types/task'
-import { getCurrentDate } from '../utilities/currentDate'
+import { getRandomDate } from '../utilities/date'
+import { Priority } from '../types/priority'
 
 export function getDefaultTasks(): Task[] {
   return [
@@ -7,25 +8,29 @@ export function getDefaultTasks(): Task[] {
       id: crypto.randomUUID(),
       text: 'Train',
       completed: false,
-      date: getCurrentDate()
+      date: getRandomDate(),
+      priority: Priority.medium
     },
     {
       id: crypto.randomUUID(),
       text: 'Greet',
       completed: true,
-      date: getCurrentDate()
+      date: getRandomDate(),
+      priority: Priority.low
     },
     {
       id: crypto.randomUUID(),
       text: 'Eat',
       completed: false,
-      date: getCurrentDate()
+      date: getRandomDate(),
+      priority: Priority.high
     },
     {
       id: crypto.randomUUID(),
       text: 'Sleep',
       completed: true,
-      date: getCurrentDate()
+      date: getRandomDate(),
+      priority: Priority.none
     }
   ]
 }

@@ -1,19 +1,27 @@
 import { useTaskContext } from '../context/TaskContext.tsx'
-import type { FilterStatus } from '../types/filterStatus.ts'
+import {
+  FilterStatus,
+  type FilterStatus as FilterStatusType
+} from '../types/filterStatus.ts'
 
 export function Filter() {
   const { handleFilter, filter } = useTaskContext()
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    handleFilter(e.target.value as FilterStatus)
+    handleFilter(e.target.value as FilterStatusType)
   }
 
   return (
     <div className="filter">
-      <select id="filter" value={filter} onChange={handleChange}>
-        <option value="all">All</option>
-        <option value="completed">Completed</option>
-        <option value="pending">Pending</option>
+      <select
+        id="filter"
+        aria-label="Filter tasks"
+        value={filter}
+        onChange={handleChange}
+      >
+        <option value={FilterStatus.all}>All</option>
+        <option value={FilterStatus.completed}>Completed</option>
+        <option value={FilterStatus.pending}>Pending</option>
       </select>
     </div>
   )

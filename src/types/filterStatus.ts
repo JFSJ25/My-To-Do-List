@@ -1,7 +1,7 @@
-const FilterStatus = {
-  Completed: "completed",
-  Pending: "pending",
-  All: "all"
+export const FilterStatus = {
+  all: 'all',
+  completed: 'completed',
+  pending: 'pending'
 } as const
 
-export type FilterStatus = typeof FilterStatus[keyof typeof FilterStatus]
+export type FilterStatus = (typeof FilterStatus)[keyof typeof FilterStatus]

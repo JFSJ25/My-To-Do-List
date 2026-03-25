@@ -1,5 +1,6 @@
 import { List } from './TaskList.tsx'
 import { Filter } from './Filter.tsx'
+import { Sorted } from './Sorted.tsx'
 import { useTaskContext } from '../context/TaskContext.tsx'
 import { useMemo } from 'react'
 import { SwitchTheme } from './SwitchTheme.tsx'
@@ -16,6 +17,8 @@ export function Form() {
     <>
       <header className="frm-header">
         <Filter />
+
+        <Sorted />
 
         <SwitchTheme />
 

@@ -33,12 +33,14 @@ describe('localStorage utilities', () => {
     expect(tasks[0]).toMatchObject({
       id: '00000001-0000-4000-8000-000000000000',
       text: 'Train',
-      completed: false
+      completed: false,
+      priority: 'medium'
     })
     expect(tasks[1]).toMatchObject({
       id: '00000002-0000-4000-8000-000000000000',
       text: 'Greet',
-      completed: true
+      completed: true,
+      priority: 'low'
     })
 
     uuidSpy.mockRestore()
@@ -50,13 +52,38 @@ describe('localStorage utilities', () => {
         id: '1',
         text: 'Practice tests',
         completed: false,
-        date: '20/03/2026 10:00'
+        date: '20/03/2026 10:00',
+        priority: 'high'
       }
     ]
 
     localStorage.setItem(TASKS_KEY, JSON.stringify(savedTasks))
 
     expect(getSaveTasks()).toEqual(savedTasks)
+  })
+
+  it('Given old tasks without priority When loading tasks Then it assigns none by default', () => {
+    localStorage.setItem(
+      TASKS_KEY,
+      JSON.stringify([
+        {
+          id: '1',
+          text: 'Legacy task',
+          completed: false,
+          date: '20/03/2026 10:00'
+        }
+      ])
+    )
+
+    expect(getSaveTasks()).toEqual([
+      {
+        id: '1',
+        text: 'Legacy task',
+        completed: false,
+        date: '20/03/2026 10:00',
+        priority: 'none'
+      }
+    ])
   })
 
   it('Given invalid JSON in localStorage When loading tasks Then it falls back to default tasks', () => {

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { Filter } from '../../../components/Filter'
+import { Sorted } from '../../../components/Sorted'
 import type { TaskContextValue } from '../../../context/TaskContext'
 import { SortOption } from '../../../types/sortOption'
 
@@ -28,31 +28,33 @@ function createContext(overrides: Partial<TaskContextValue>): TaskContextValue {
   }
 }
 
-describe('Filter visual behavior', () => {
+describe('Sorted visual behavior', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  it('Given a pending filter When Filter is rendered Then dropdown shows pending', () => {
-    mockUseTaskContext.mockReturnValue(createContext({ filter: 'pending' }))
-
-    render(<Filter />)
-
-    expect(screen.getByRole('combobox')).toHaveValue('pending')
-  })
-
-  it('Given Filter is rendered When user changes option Then handleFilter is called with new value', async () => {
-    const user = userEvent.setup()
-    const handleFilter = vi.fn()
-
+  it('Given active sort is date When Sorted is rendered Then dropdown shows date', () => {
     mockUseTaskContext.mockReturnValue(
-      createContext({ filter: 'all', handleFilter })
+      createContext({ activeSort: SortOption.date })
     )
 
-    render(<Filter />)
+    render(<Sorted />)
 
-    await user.selectOptions(screen.getByRole('combobox'), 'completed')
+    expect(screen.getByRole('combobox')).toHaveValue(SortOption.date)
+  })
 
-    expect(handleFilter).toHaveBeenCalledWith('completed')
+  it('Given Sorted is rendered When user changes option Then handleSort is called with selected sort', async () => {
+    const user = userEvent.setup()
+    const handleSort = vi.fn()
+
+    mockUseTaskContext.mockReturnValue(
+      createContext({ activeSort: SortOption.custom, handleSort })
+    )
+
+    render(<Sorted />)
+
+    await user.selectOptions(screen.getByRole('combobox'), SortOption.priority)
+
+    expect(handleSort).toHaveBeenCalledWith(SortOption.priority)
   })
 })

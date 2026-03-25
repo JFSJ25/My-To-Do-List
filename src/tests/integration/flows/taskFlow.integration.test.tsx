@@ -46,10 +46,16 @@ describe('Todo app full flow integration', () => {
 
     expect(screen.getByText('1 of 1 completed')).toBeInTheDocument()
 
-    await user.selectOptions(screen.getByRole('combobox'), 'pending')
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Filter tasks' }),
+      'pending'
+    )
     expect(screen.getByText('No pending tasks')).toBeInTheDocument()
 
-    await user.selectOptions(screen.getByRole('combobox'), 'completed')
+    await user.selectOptions(
+      screen.getByRole('combobox', { name: 'Filter tasks' }),
+      'completed'
+    )
     expect(
       screen.getByDisplayValue('Ship portfolio todo app')
     ).toBeInTheDocument()
